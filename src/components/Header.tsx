@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Cpu, Settings, FolderKanban, Plus, Check, X } from "lucide-react";
+import { Cpu, Settings, FolderKanban, Plus, Check, X, HelpCircle } from "lucide-react";
 
 interface HeaderProps {
   nodeCount: number;
@@ -10,6 +10,7 @@ interface HeaderProps {
   currentSubjectId: string;
   onSelectSubject: (id: string) => void;
   onAddSubject: (name: string) => void;
+  onShowLanding?: () => void;
 }
 
 export default function Header({ 
@@ -20,7 +21,8 @@ export default function Header({
   subjects,
   currentSubjectId,
   onSelectSubject,
-  onAddSubject
+  onAddSubject,
+  onShowLanding
 }: HeaderProps) {
   const [showNewSubjectForm, setShowNewSubjectForm] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
@@ -42,10 +44,10 @@ export default function Header({
             <Cpu className="w-5 h-5 text-[#8c6239]" />
           </div>
           <div>
-            <h1 className="font-serif text-lg md:text-xl font-bold text-[#4a3e3d] tracking-tight">
+            <h1 className="font-serif text-xl md:text-2xl font-black text-[#3a2f2e] tracking-tight">
               Ciara's Second Brain
             </h1>
-            <p className="text-[9px] text-[#8c6239] font-bold uppercase tracking-widest">
+            <p className="text-[10px] text-[#8c6239] font-extrabold uppercase tracking-widest">
               Dynamic Semantic Graph Core
             </p>
           </div>
@@ -111,7 +113,7 @@ export default function Header({
       </div>
 
       {/* Segmented View Toggle (Mobile/Tablet helper) */}
-      <div className="flex bg-[#f0eded] rounded-full p-1 border border-[#c0c8c9]/40 shrink-0">
+      <div className="hidden md:flex bg-[#f0eded] rounded-full p-1 border border-[#c0c8c9]/40 shrink-0">
         <button
           onClick={() => onToggleView?.("graph")}
           className={`px-4 md:px-5 py-1 rounded-full text-xs font-semibold transition-all ${
@@ -153,6 +155,16 @@ export default function Header({
         >
           <Settings className="w-5 h-5" />
         </button>
+
+        {onShowLanding && (
+          <button 
+            onClick={onShowLanding}
+            className="p-2 hover:bg-[#beeaef]/30 rounded-full transition-colors text-[#3b6569] bg-[#beeaef]/20 hover:scale-105 transition-transform"
+            title="About & User Journey Guide"
+          >
+            <HelpCircle className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </header>
   );

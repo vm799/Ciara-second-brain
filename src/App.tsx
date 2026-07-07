@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
+// @ts-ignore
+import bgImage from "./assets/images/pastel_flow_background_1783439095971.jpg";
 import { BrainNode, NodeLink, ChatMessage } from "./types";
 import { 
   Upload, Play, Pause, Plus, Trash2, Link2, Search, Send, 
@@ -23,6 +25,7 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [loadingChat, setLoadingChat] = useState(false);
   const [currentView, setCurrentView] = useState<"graph" | "chat">("graph");
+  const [mobileTab, setMobileTab] = useState<"intake" | "graph" | "chat" | "index">("graph");
 
   // Drag and drop states
   const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -43,6 +46,7 @@ export default function App() {
   // App settings/info modal
   const [showHelp, setShowHelp] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
 
   // Sidebar / panel tabs or states
   const [newTagName, setNewTagName] = useState("");
@@ -633,11 +637,22 @@ export default function App() {
   }, [isPlayingAudio]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] text-[#1c1b1b] overflow-x-hidden selection:bg-[#beeaef] selection:text-[#456e73]">
+    <div 
+      className="min-h-screen flex flex-col text-[#1c1b1b] overflow-x-hidden selection:bg-[#beeaef] selection:text-[#456e73] pb-20 lg:pb-0"
+      style={{ 
+        backgroundImage: `linear-gradient(to bottom, rgba(252, 249, 248, 0.5), rgba(252, 249, 248, 0.4)), url(${bgImage})`, 
+        backgroundSize: 'cover', 
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center' 
+      }}
+    >
       <Header 
         nodeCount={nodes.length} 
         onOpenSettings={() => setShowConfig(true)} 
-        onToggleView={(v) => setCurrentView(v)}
+        onToggleView={(v) => {
+          setCurrentView(v);
+          setMobileTab(v as any);
+        }}
         currentView={currentView}
         subjects={subjects}
         currentSubjectId={currentSubjectId}
@@ -646,20 +661,120 @@ export default function App() {
           setActiveNode(null);
         }}
         onAddSubject={handleAddSubject}
+        onShowLanding={() => setShowLanding(true)}
       />
 
-      <div className="flex-1 flex flex-col lg:flex-row relative">
+      {showLanding ? (
+        <div 
+          className="flex-1 relative overflow-hidden flex flex-col justify-between py-8 px-4 md:px-12 lg:px-24"
+          style={{ 
+            backgroundImage: `linear-gradient(to bottom, rgba(250, 247, 245, 0.45), rgba(250, 247, 245, 0.4)), url(${bgImage})`, 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center' 
+          }}
+        >
+          {/* Abstract Flowing Pastel Background Blobs */}
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#beeaef]/60 blur-3xl animate-pulse duration-[8s]" />
+            <div className="absolute -bottom-45 -right-45 w-[500px] h-[500px] rounded-full bg-[#ffd8ea]/55 blur-3xl animate-pulse duration-[10s]" />
+            <div className="absolute top-1/2 left-1/3 w-[350px] h-[350px] rounded-full bg-[#beeaef]/50 blur-3xl animate-pulse duration-[6s]" />
+            <div className="absolute bottom-1/4 left-1/10 w-[250px] h-[250px] rounded-full bg-[#714f94]/25 blur-3xl animate-pulse duration-[9s]" />
+          </div>
+
+          <div className="relative z-10 max-w-5xl mx-auto flex-1 flex flex-col justify-center my-auto">
+            {/* Top Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#beeaef]/60 border border-[#3b6569]/40 px-3 py-1 rounded-full text-[10px] text-[#3b6569] font-extrabold uppercase tracking-widest mb-6 self-start animate-fadeIn">
+              <Sparkles className="w-3.5 h-3.5" /> Dynamic Semantic Archival Vault
+            </div>
+
+            {/* Giant Bold App Title & Heading */}
+            <div className="space-y-4 max-w-3xl mb-8">
+              <h1 className="font-serif text-5xl md:text-7xl font-black text-[#3a2f2e] tracking-tight leading-none">
+                Ciara's <span className="text-[#3b6569] bg-[#beeaef]/50 px-4 py-1 rounded-2xl">Second Brain</span>
+              </h1>
+              <p className="font-sans text-lg md:text-xl font-bold text-[#3b6569] leading-relaxed">
+                An elegant multi-subject knowledge and relational semantic core. Map notes, audio logs, and photographic exhibits into a connected tapestry.
+              </p>
+            </div>
+
+            {/* Grid Explaining What, Does, How */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 w-full">
+              {/* Card 1: What is it? */}
+              <div className="bg-white/85 backdrop-blur-md p-6 rounded-2xl border border-[#c0c8c9]/50 shadow-sm hover:shadow-md hover:border-[#3b6569]/40 transition-all space-y-3 group">
+                <div className="w-10 h-10 rounded-xl bg-[#beeaef] text-[#3b6569] flex items-center justify-center font-black text-lg shadow-sm">
+                  01
+                </div>
+                <h3 className="font-sans text-base font-black text-[#3a2f2e] uppercase tracking-wide">
+                  What is it?
+                </h3>
+                <p className="text-xs text-[#404849]/95 leading-relaxed font-sans font-medium">
+                  An elegant **personal digital repository** designed to liberate information from boring static folders. It dynamically generates an interactive node-network representing your knowledge ecosystem.
+                </p>
+              </div>
+
+              {/* Card 2: What does it do? */}
+              <div className="bg-white/85 backdrop-blur-md p-6 rounded-2xl border border-[#c0c8c9]/50 shadow-sm hover:shadow-md hover:border-[#3b6569]/40 transition-all space-y-3 group">
+                <div className="w-10 h-10 rounded-xl bg-[#ffd8ea] text-[#714f94] flex items-center justify-center font-black text-lg shadow-sm">
+                  02
+                </div>
+                <h3 className="font-sans text-base font-black text-[#3a2f2e] uppercase tracking-wide">
+                  What does it do?
+                </h3>
+                <p className="text-xs text-[#404849]/95 leading-relaxed font-sans font-medium">
+                  It takes raw data—images, live voice recordings, or scribbed thoughts—transcribes them using Gemini, extracts entities, and **automatically suggests cross-linked connections** to other thoughts in your vault.
+                </p>
+              </div>
+
+              {/* Card 3: How to use it? */}
+              <div className="bg-white/85 backdrop-blur-md p-6 rounded-2xl border border-[#c0c8c9]/50 shadow-sm hover:shadow-md hover:border-[#3b6569]/40 transition-all space-y-3 group">
+                <div className="w-10 h-10 rounded-xl bg-[#beeaef] text-[#3b6569] flex items-center justify-center font-black text-lg shadow-sm">
+                  03
+                </div>
+                <h3 className="font-sans text-base font-black text-[#3a2f2e] uppercase tracking-wide">
+                  How to use?
+                </h3>
+                <p className="text-xs text-[#404849]/95 leading-relaxed font-sans font-medium">
+                  1. **Intake**: Drop a file or record a voice memo.<br />
+                  2. **Link**: Click any node and map a relation to another.<br />
+                  3. **Ask**: Query the AI in natural language to locate files or answer complex contextual questions instantly.
+                </p>
+              </div>
+            </div>
+
+            {/* Launch CTA */}
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <button
+                onClick={() => setShowLanding(false)}
+                className="w-full sm:w-auto px-8 py-4 bg-[#3b6569] hover:bg-[#3b6569]/90 text-white rounded-full font-sans font-black uppercase text-sm tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group hover:scale-[1.02]"
+              >
+                Launch Brain Core <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+              
+              <div className="text-xs text-[#404849]/80 font-mono">
+                Currently tracking <span className="font-bold text-[#3b6569]">{nodes.length} nodes</span> across <span className="font-bold text-[#3b6569]">{subjects.length || 3} vaults</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer of Landing Page */}
+          <div className="relative z-10 border-t border-[#c0c8c9]/35 pt-6 mt-8 flex flex-col sm:flex-row justify-between items-center text-[10px] text-[#404849]/60 font-mono tracking-widest uppercase">
+            <span>OFFLINE-FIRST PERSISTED SEED</span>
+            <span>SECURE GEMINI SEMANTIC EXTRACTION COGNITION</span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col lg:flex-row relative">
         
-        {/* Left Side: Drag & Drop Intake Box & Quick Guides (33% Width on Large Screens) */}
-        <section className="w-full lg:w-[32%] bg-[#f6f3f2] border-r border-[#c0c8c9]/40 p-6 flex flex-col gap-6">
+        {/* Left Side: Capture Intake & Vault Index List */}
+        <section className={`w-full lg:w-[32%] bg-[#f6f3f2]/35 backdrop-blur-md border-r border-[#c0c8c9]/40 p-4 md:p-6 lg:flex flex-col gap-6 ${mobileTab === "intake" || mobileTab === "index" ? "flex" : "hidden"}`}>
           
-          {/* Curatorial Intake Box */}
-          <div className="bg-white p-5 rounded-lg border border-[#c0c8c9]/40 shadow-sm relative overflow-hidden">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#c0c8c9]/20">
+          {/* Capture Intake Box */}
+          <div className={`bg-white/75 backdrop-blur-sm p-5 rounded-lg border border-[#c0c8c9]/40 shadow-sm relative overflow-hidden ${mobileTab === "intake" ? "block" : "hidden lg:block"}`}>
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#c0c8c9]/30">
               <div className="flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-[#3b6569]" />
-                <h3 className="font-serif text-sm font-bold text-[#3b6569] uppercase tracking-wider">
-                  Intellectual Intake
+                <Upload className="w-4 h-4 text-[#3b6569]" />
+                <h3 className="font-sans text-xs font-black text-[#3a2f2e] uppercase tracking-widest">
+                  Capture Intake
                 </h3>
               </div>
               <button 
@@ -805,10 +920,10 @@ export default function App() {
             </button>
           </div>
 
-          {/* Quick Archival Insights list */}
-          <div className="flex-1 bg-white p-5 rounded-lg border border-[#c0c8c9]/40 shadow-sm flex flex-col overflow-hidden">
-            <h4 className="font-serif text-sm font-bold text-[#3b6569] uppercase tracking-wider mb-3 pb-1 border-b border-[#c0c8c9]/20">
-              Vault Index Summary
+          {/* Knowledge Vault Index */}
+          <div className={`flex-1 bg-white/75 backdrop-blur-sm p-5 rounded-lg border border-[#c0c8c9]/40 shadow-sm flex flex-col overflow-hidden ${mobileTab === "index" ? "flex" : "hidden lg:flex"}`}>
+            <h4 className="font-sans text-xs font-black text-[#3a2f2e] uppercase tracking-widest mb-3 pb-2 border-b border-[#c0c8c9]/30">
+              Knowledge Vault Index
             </h4>
             
             <div className="flex-1 overflow-y-auto custom-scroll space-y-3 pr-1">
@@ -818,6 +933,7 @@ export default function App() {
                   onClick={() => {
                     setActiveNode(n);
                     setCurrentView("graph");
+                    setMobileTab("graph");
                   }}
                   className={`p-3 rounded border text-xs transition-all cursor-pointer flex items-center justify-between ${
                     activeNode?.id === n.id 
@@ -852,11 +968,11 @@ export default function App() {
         </section>
 
         {/* Right Side / Middle Area: Dynamic Views */}
-        <section className="flex-1 flex flex-col relative min-h-[450px]">
+        <section className={`flex-1 flex flex-col relative min-h-[450px] lg:flex ${mobileTab === "graph" || mobileTab === "chat" ? "flex" : "hidden"}`}>
           
           {/* VIEW 1: Graph Representation Canvas */}
           {currentView === "graph" && (
-            <div className="flex-1 relative bg-[#f6f3f2] overflow-hidden marble-bg flex flex-col">
+            <div className="flex-1 relative bg-[#f6f3f2]/20 backdrop-blur-[2px] overflow-hidden marble-bg flex flex-col">
               
               {/* Interactive SVG Layer */}
               <div className="flex-1 relative cursor-grab active:cursor-grabbing">
@@ -975,14 +1091,14 @@ export default function App() {
               </div>
 
               {/* Bottom Sheet Context slide-up panel (Restyled with Opulent Marble) */}
-              <div className={`border-t border-[#c0c8c9]/50 bg-white flex flex-col transition-all duration-300 ${
+              <div className={`border-t border-[#c0c8c9]/50 bg-white/75 backdrop-blur-md flex flex-col transition-all duration-300 ${
                 activeNode ? "h-[320px]" : "h-0 overflow-hidden"
               }`}>
                 {activeNode && (
                   <div className="flex-1 flex flex-col overflow-hidden">
                     
                     {/* Top title and dismiss bar */}
-                    <div className="px-6 py-3 bg-[#f6f3f2] border-b border-[#c0c8c9]/20 flex items-center justify-between">
+                    <div className="px-6 py-3 bg-[#f6f3f2]/40 backdrop-blur-sm border-b border-[#c0c8c9]/20 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span 
                           className="w-3 h-3 rounded-full" 
@@ -1295,7 +1411,7 @@ export default function App() {
 
           {/* VIEW 2: Conversational Semantic Search Chat Stream */}
           {currentView === "chat" && (
-            <div className="flex-1 flex flex-col relative bg-white marble-bg">
+            <div className="flex-1 flex flex-col relative bg-white/25 backdrop-blur-[3px] marble-bg">
               
               {/* Message History List */}
               <div className="flex-1 overflow-y-auto custom-scroll p-6 md:p-8 space-y-6">
@@ -1315,7 +1431,7 @@ export default function App() {
                           : "bg-[#beeaef] border-[#3b6569]"
                       }`}>
                         {isUser ? (
-                          <span className="font-serif text-[11px] font-bold text-[#404849]">EC</span>
+                          <span className="font-serif text-[11px] font-bold text-[#404849]">C</span>
                         ) : (
                           <Cpu className="w-4 h-4 text-[#3b6569]" />
                         )}
@@ -1324,7 +1440,7 @@ export default function App() {
                       {/* Msg text bubble */}
                       <div className={`space-y-2 max-w-[80%] ${isUser ? "text-right" : ""}`}>
                         <div className="font-mono text-[10px] text-[#404849]/70 uppercase tracking-widest font-bold">
-                          {isUser ? "Eleanor" : "Synthesizer"} • {msg.timestamp}
+                          {isUser ? "Ciara" : "Brain Assistant"} • {msg.timestamp}
                         </div>
                         
                         <div className={`p-4 rounded-lg text-xs leading-relaxed font-serif shadow-sm border ${
@@ -1347,6 +1463,7 @@ export default function App() {
                                   if (citeNode) {
                                     setActiveNode(citeNode);
                                     setCurrentView("graph");
+                                    setMobileTab("graph");
                                   }
                                 }}
                                 className="px-2.5 py-1 bg-white border border-[#c0c8c9]/50 hover:border-[#714f94] hover:shadow-sm rounded-full text-[10px] text-[#404849] hover:text-[#714f94] transition-all flex items-center gap-1"
@@ -1371,7 +1488,7 @@ export default function App() {
               </div>
 
               {/* Suggestions Chips Row */}
-              <div className="px-6 py-2 border-t border-[#c0c8c9]/20 bg-[#f6f3f2]/40 flex gap-2 overflow-x-auto custom-scroll">
+              <div className="px-6 py-2 border-t border-[#c0c8c9]/20 bg-[#f6f3f2]/30 backdrop-blur-sm flex gap-2 overflow-x-auto custom-scroll">
                 {[
                   "Find my notes on neural networks from the last symposium.",
                   "Explain connections mapped to Alpha-7",
@@ -1388,7 +1505,7 @@ export default function App() {
               </div>
 
               {/* User Chat Entry Form */}
-              <div className="p-4 md:p-6 bg-[#f6f3f2] border-t border-[#c0c8c9]/50">
+              <div className="p-4 md:p-6 bg-[#f6f3f2]/35 backdrop-blur-md border-t border-[#c0c8c9]/50">
                 <form onSubmit={handleSendChat} className="max-w-3xl mx-auto relative group">
                   <div className="absolute inset-0 bg-[#3b6569]/10 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity rounded-full pointer-events-none" />
                   <div className="relative flex items-center bg-white border border-[#c0c8c9] rounded-full p-1 pl-5 pr-2 focus-within:border-[#3b6569] focus-within:ring-2 focus-within:ring-[#beeaef] transition-all shadow-sm">
@@ -1426,6 +1543,7 @@ export default function App() {
         </section>
 
       </div>
+      )}
 
       {/* MODAL 1: Intake processed outcome Confirmation panel */}
       {processedOutcome && (
@@ -1770,6 +1888,65 @@ export default function App() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Mobile Navigation Tab Bar (Elegant, floating glass design) */}
+      {!showLanding && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#fcf9f8]/95 backdrop-blur-md border-t border-[#c0c8c9]/50 flex justify-around items-center py-2 z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] px-4">
+          <button
+            onClick={() => setMobileTab("intake")}
+            className={`flex flex-col items-center gap-1 py-1 px-3 rounded-lg transition-all ${
+              mobileTab === "intake"
+                ? "text-[#3b6569] font-bold"
+                : "text-[#404849]/60 hover:text-[#404849]"
+            }`}
+          >
+            <Upload className={`w-5 h-5 transition-transform ${mobileTab === "intake" ? "scale-110 text-[#3b6569]" : ""}`} />
+            <span className="text-[10px] tracking-wider uppercase font-sans font-bold">Capture</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setMobileTab("graph");
+              setCurrentView("graph");
+            }}
+            className={`flex flex-col items-center gap-1 py-1 px-3 rounded-lg transition-all ${
+              mobileTab === "graph"
+                ? "text-[#3b6569] font-bold"
+                : "text-[#404849]/60 hover:text-[#404849]"
+            }`}
+          >
+            <Cpu className={`w-5 h-5 transition-transform ${mobileTab === "graph" ? "scale-110 text-[#3b6569]" : ""}`} />
+            <span className="text-[10px] tracking-wider uppercase font-sans font-bold">Graph Map</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setMobileTab("chat");
+              setCurrentView("chat");
+            }}
+            className={`flex flex-col items-center gap-1 py-1 px-3 rounded-lg transition-all ${
+              mobileTab === "chat"
+                ? "text-[#3b6569] font-bold"
+                : "text-[#404849]/60 hover:text-[#404849]"
+            }`}
+          >
+            <MessageSquare className={`w-5 h-5 transition-transform ${mobileTab === "chat" ? "scale-110 text-[#3b6569]" : ""}`} />
+            <span className="text-[10px] tracking-wider uppercase font-sans font-bold">AI Chat</span>
+          </button>
+
+          <button
+            onClick={() => setMobileTab("index")}
+            className={`flex flex-col items-center gap-1 py-1 px-3 rounded-lg transition-all ${
+              mobileTab === "index"
+                ? "text-[#3b6569] font-bold"
+                : "text-[#404849]/60 hover:text-[#404849]"
+            }`}
+          >
+            <FileText className={`w-5 h-5 transition-transform ${mobileTab === "index" ? "scale-110 text-[#3b6569]" : ""}`} />
+            <span className="text-[10px] tracking-wider uppercase font-sans font-bold">Index</span>
+          </button>
         </div>
       )}
 
