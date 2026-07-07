@@ -10,6 +10,10 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
+    "name": "react-example",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/vm799/Ciara-second-brain.git"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
