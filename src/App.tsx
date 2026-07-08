@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "./components/Header";
 // @ts-ignore
-import bgImage from "./assets/images/pastel_flow_background_1783439095971.jpg";
+import bgImage from "./assets/images/colorful_ballerina_silhouette_1783490261389.jpg";
 import { BrainNode, NodeLink, ChatMessage } from "./types";
 import { 
   Upload, Play, Pause, Plus, Trash2, Link2, Search, Send, 
